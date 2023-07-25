@@ -49,7 +49,7 @@ function createOption(value: string, index: number): HTMLLIElement {
   listItem.textContent = value;
   listItem.setAttribute("data-value", index.toString());
   listItem.addEventListener("click", (event: MouseEvent) => {
-    const element = event.target as HTMLDivElement;
+    const element = event.target as HTMLLIElement;
     const index = element.getAttribute("data-value");
     if (index) {
       multiple
