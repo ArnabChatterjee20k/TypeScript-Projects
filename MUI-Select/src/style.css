@@ -1,0 +1,17 @@
+.option {
+  list-style: none;
+  padding: 8px 4px;
+  cursor: pointer;
+}
+.option:hover{
+  background: cyan;
+}
+.selectList {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+}
+.selectDisplay {
+  border: 2px solid black;
+  padding: 2px;
+}
