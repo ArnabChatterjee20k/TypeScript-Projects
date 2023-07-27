@@ -2,7 +2,7 @@ import "./style.css";
 const ID = "custom-select";
 const app = document.getElementById("app") as HTMLDivElement;
 const select = document.createElement("div");
-const multiple = false;
+const multiple = true;
 select.id = ID;
 app.appendChild(select);
 
@@ -23,16 +23,31 @@ function createSelect(): void {
 }
 
 function renderSelectedOptions() {
-  let optionsDisplay = document.querySelector(".selectDisplay");
-  if (!optionsDisplay) {
-    optionsDisplay = document.createElement("div");
+  const selectDisplay = select.querySelector(".selectDisplay");
+  const optionsDisplay = selectDisplay || document.createElement("div");
+
+  if (!selectDisplay) {
     optionsDisplay.classList.add("selectDisplay");
     select.appendChild(optionsDisplay);
   }
 
-  optionsDisplay.textContent =
-    selectStack.length === 0 ? "No Options Selected!" : options[selectStack[0]];
+  const batch = document.createDocumentFragment();
+  if (multiple) {
+    selectStack.forEach((option) => batch.append(createChip(options[option])));
+  } else {
+    const selectedOption = options[selectStack[0]];
+    batch.append(createChip(selectedOption));
+    console.log(selectStack);
+  }
+
+  optionsDisplay.textContent = "";
+  optionsDisplay.append(batch);
+
+  if (selectStack.length === 0) {
+    optionsDisplay.textContent = "No Options Selected!";
+  }
 }
+
 function renderOptions(): void {
   const optionList = document.createElement("ul");
   optionList.classList.add("selectList");
@@ -61,4 +76,11 @@ function createOption(value: string, index: number): HTMLLIElement {
   });
 
   return listItem;
+}
+
+function createChip(value: string): HTMLParagraphElement {
+  const chip = document.createElement("p");
+  chip.classList.add("chip");
+  chip.textContent = value;
+  return chip;
 }
