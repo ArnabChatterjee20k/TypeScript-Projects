@@ -1,4 +1,5 @@
 import "./style.css";
+import { VisibleOption } from "./VisibleOption";
 const ID = "custom-select";
 const app = document.getElementById("app") as HTMLDivElement;
 const select = document.createElement("div");
@@ -15,11 +16,17 @@ const options: string[] = [
 ];
 const selectStack: number[] = [];
 
+const visibleOption = new VisibleOption(renderOptions, removeOptions);
+
 createSelect();
 
 function createSelect(): void {
   renderSelectedOptions();
-  renderOptions();
+  select.onclick = () => {
+    // debugger;
+    const state = visibleOption.getVisible;
+    visibleOption.setVisible = !state;
+  };
 }
 
 function renderSelectedOptions() {
@@ -49,13 +56,24 @@ function renderSelectedOptions() {
 }
 
 function renderOptions(): void {
-  const optionList = document.createElement("ul");
-  optionList.classList.add("selectList");
-  options.map((option: string, index: number): void => {
+  let optionList = document.querySelector(
+    ".selectList"
+  ) as HTMLUListElement | null;
+
+  if (!optionList) {
+    optionList = document.createElement("ul");
+    optionList.classList.add("selectList");
+  }
+  options?.map((option: string, index: number): void => {
     const listItem = createOption(option, index);
-    optionList.appendChild(listItem);
+    optionList?.appendChild(listItem);
   });
   select.appendChild(optionList);
+}
+
+function removeOptions(): void {
+  const optionsDisplay = document.querySelector(".selectList");
+  if (optionsDisplay) optionsDisplay.textContent = null;
 }
 
 function createOption(value: string, index: number): HTMLLIElement {
