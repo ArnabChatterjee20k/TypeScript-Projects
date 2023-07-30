@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,8 +7,17 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app">
+    <div>
+      <label>
+        <input type="radio" name="selectionType" value="multiple" checked />
+        Multiple
+      </label>
+      <label>
+        <input type="radio" name="selectionType" value="single" />
+        Single
+      </label>
     </div>
+    <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

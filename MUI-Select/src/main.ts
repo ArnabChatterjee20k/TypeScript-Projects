@@ -3,7 +3,7 @@ import { VisibleOption } from "./VisibleOption";
 const ID = "custom-select";
 const app = document.getElementById("app") as HTMLDivElement;
 const select = document.createElement("div");
-const multiple = true;
+let multiple = true;
 select.id = ID;
 app.appendChild(select);
 
@@ -18,6 +18,19 @@ const options: string[] = [
 const selectStack: number[] = [];
 
 const visibleOption = new VisibleOption(renderOptions, removeOptions);
+
+const radioButtons = document.querySelectorAll<HTMLInputElement>(
+  "input[name='selectionType']"
+);
+radioButtons.forEach((radio: HTMLInputElement) => {
+  radio.addEventListener("change", () => {
+    multiple = radio.value === "multiple";
+    selectStack.length = 0;
+    visibleOption.setVisible = false
+    removeOptions();
+    renderSelectedOptions();
+  });
+});
 
 createSelect();
 
@@ -63,7 +76,7 @@ function renderOptions(): void {
   let optionList = document.querySelector(
     ".selectList"
   ) as HTMLUListElement | null;
-
+    
   if (!optionList) {
     optionList = document.createElement("ul");
     optionList.classList.add("selectList");
