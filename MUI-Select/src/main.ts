@@ -22,21 +22,24 @@ createSelect();
 
 function createSelect(): void {
   renderSelectedOptions();
-  select.onclick = () => {
-    // debugger;
-    const state = visibleOption.getVisible;
-    visibleOption.setVisible = !state;
-  };
 }
 
 function renderSelectedOptions() {
-  const selectDisplay = select.querySelector(".selectDisplay");
+  const selectDisplay = select.querySelector(
+    ".selectDisplay"
+  ) as HTMLDivElement;
   const optionsDisplay = selectDisplay || document.createElement("div");
 
   if (!selectDisplay) {
     optionsDisplay.classList.add("selectDisplay");
     select.appendChild(optionsDisplay);
   }
+
+  optionsDisplay.onclick = () => {
+    // debugger;
+    const state = visibleOption.getVisible;
+    visibleOption.setVisible = !state;
+  };
 
   const batch = document.createDocumentFragment();
   if (multiple) {
@@ -73,7 +76,7 @@ function renderOptions(): void {
 
 function removeOptions(): void {
   const optionsDisplay = document.querySelector(".selectList");
-  if (optionsDisplay) optionsDisplay.textContent = null;
+  if (optionsDisplay) optionsDisplay.parentNode?.removeChild(optionsDisplay);
 }
 
 function createOption(value: string, index: number): HTMLLIElement {
@@ -81,17 +84,23 @@ function createOption(value: string, index: number): HTMLLIElement {
   listItem.classList.add("option");
   listItem.textContent = value;
   listItem.setAttribute("data-value", index.toString());
-  listItem.addEventListener("click", (event: MouseEvent) => {
-    const element = event.target as HTMLLIElement;
-    const index = element.getAttribute("data-value");
-    if (index) {
-      multiple
-        ? selectStack.push(Number.parseInt(index))
-        : (selectStack[0] = Number.parseInt(index));
-    }
-    console.log(selectStack[0]);
-    renderSelectedOptions();
-  });
+
+  if (selectStack.includes(index)) {
+    listItem.classList.add("selected");
+  } else {
+    listItem.addEventListener("click", (event: MouseEvent) => {
+      const element = event.target as HTMLLIElement;
+      const index = element.getAttribute("data-value");
+      if (index) {
+        multiple
+          ? selectStack.push(Number.parseInt(index))
+          : (selectStack[0] = Number.parseInt(index));
+      }
+      renderSelectedOptions();
+      removeOptions();
+      renderOptions();
+    });
+  }
 
   return listItem;
 }

@@ -20,6 +20,7 @@
   flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
+
 .selectDisplay {
   border: 2px solid black;
   padding: 10px;
@@ -40,4 +41,8 @@
 }
 .chip:hover {
   background: #c6c5c5;
+}
+
+.selected {
+  background-color: aliceblue;
 }
