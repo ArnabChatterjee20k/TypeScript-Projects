@@ -14,6 +14,7 @@ const options: string[] = [
   "OSS Projects",
   "Building",
 ];
+
 const selectStack: number[] = [];
 
 const visibleOption = new VisibleOption(renderOptions, removeOptions);
@@ -87,6 +88,15 @@ function createOption(value: string, index: number): HTMLLIElement {
 
   if (selectStack.includes(index)) {
     listItem.classList.add("selected");
+    listItem.addEventListener("click", (event: MouseEvent) => {
+      const element = event.target as HTMLLIElement;
+      const index = element.getAttribute("data-value");
+      if (index)
+        selectStack.splice(selectStack.indexOf(Number.parseInt(index)), 1);
+      removeOptions();
+      renderOptions();
+      renderSelectedOptions()
+    });
   } else {
     listItem.addEventListener("click", (event: MouseEvent) => {
       const element = event.target as HTMLLIElement;
