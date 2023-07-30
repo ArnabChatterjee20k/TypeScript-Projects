@@ -95,7 +95,7 @@ function createOption(value: string, index: number): HTMLLIElement {
         selectStack.splice(selectStack.indexOf(Number.parseInt(index)), 1);
       removeOptions();
       renderOptions();
-      renderSelectedOptions()
+      renderSelectedOptions();
     });
   } else {
     listItem.addEventListener("click", (event: MouseEvent) => {

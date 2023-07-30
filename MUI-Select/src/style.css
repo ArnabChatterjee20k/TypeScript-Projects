@@ -46,3 +46,7 @@
 .selected {
   background-color: aliceblue;
 }
+
+.selected:hover {
+  background-color: rgb(214, 236, 255);
+}
