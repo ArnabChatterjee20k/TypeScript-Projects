@@ -1,29 +1,39 @@
 import { FormEvent, useRef, useState } from "react";
 import { Col, Form, Row, Stack, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 import { NoteData, Tag } from "../types/NoteData.type";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
 };
 
-export default function NoteForm({ onSubmit }: NoteFormProps) {
+export default function NoteForm({
+  onSubmit,
+  onAddTag,
+  availableTags,
+}: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
+  const nav = useNavigate()
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     onSubmit({
       title: titleRef.current!.value,
       markdown: bodyRef.current!.value,
-      tags: [],
+      tags: selectedTags,
     });
+
+    nav("..")
   }
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Stack gap={4}>
         <Row>
           <Col>
@@ -41,13 +51,20 @@ export default function NoteForm({ onSubmit }: NoteFormProps) {
                 value={selectedTags.map(({ label, id }) => {
                   return { label, value: id };
                 })}
+                options={availableTags.map((tag) => {
+                  return { label: tag.label, value: tag.id };
+                })}
                 onChange={(tags) => {
                   const allTags = tags.map(({ label, value }) => {
                     return { label, id: value };
                   });
                   setSelectedTags(allTags);
                 }}
-                onCreateOption={}
+                onCreateOption={(label) => {
+                  const newTag = { id: crypto.randomUUID(), label };
+                  onAddTag(newTag);
+                  setSelectedTags((prev) => [...prev, newTag]);
+                }}
               />
             </Form.Group>
           </Col>
